@@ -1,10 +1,3 @@
-# breadth_first_search.py
-"""Volume 2: Breadth-First Search.
-<Joseph Wilkes>
-<sec 01>
-<25 oct 18>
-"""
-
 import pdb
 import time
 # import numpy as np
