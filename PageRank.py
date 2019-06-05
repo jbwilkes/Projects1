@@ -1,9 +1,3 @@
-# solutions.py
-"""Volume 1: The Page Rank Algorithm.
-<Joseph wilkes>
-<sec 01>
-<05 mar 2019>
-"""
 import numpy as np
 # https://stackoverflow.com/questions/1987694/how-to-print-the-full-numpy-array-without-truncation
 np.set_printoptions(threshold=np.nan)
