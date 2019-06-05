@@ -1,9 +1,3 @@
-# drazin.py
-"""Volume 1: The Drazin Inverse.
-<Joseph Wilkes>
-<sec 01 >
-<april 4, 2019>
-"""
 import numpy as np
 from scipy import linalg as la #used in index() helper function
 from numpy.linalg import matrix_power as linAlgMP #used in is_drazin()
