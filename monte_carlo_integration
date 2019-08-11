@@ -1,0 +1,194 @@
+import numpy as np
+from scipy import linalg as la
+from scipy import stats
+from matplotlib import pyplot as plt
+import pdb
+
+def ball_volume(n, N=10000):
+    """Estimate the volume of the n-dimensional unit ball.
+
+    Parameters:
+        n (int): The dimension of the ball. n=2 corresponds to the unit circle,
+            n=3 corresponds to the unit sphere, and so on.
+        N (int): The number of random points to sample.
+
+    Returns:
+        (float): An estimate for the volume of the n-dimensional unit ball.
+    """
+    # get N points in the n-dimensional [-1,1] box
+    #problem when N is a float
+    points = np.random.uniform(-1,1,(n,N))
+    #compute norm of the points to verify if less than 1
+    # axis = 0 implies compute norm of columns
+    lengths = la.norm(points,axis=0)
+    num_within = np.count_nonzero(lengths < 1)
+    return (2**n) * (num_within / N)
+
+def ball_v_test():
+    """ test the ball volume function"""
+    a,b,c = int(2e3),int(2e4),int(2e5)
+    #note that 2e3 is a float (2000.0) and int(2e3) is (2000) which was problem
+    print(ball_volume(2,a),ball_volume(2,b),ball_volume(2,c),sep=' ')
+    print(ball_volume(3,a),ball_volume(3,b),ball_volume(3,c),sep=' ')
+    print(ball_volume(4,a),ball_volume(4,b),ball_volume(4,c),sep=' ')
+    # I spent forever trying to figure out what was wrong,
+    #and it was in the arguments of the test cases not program
+
+def mc_integrate1d(f, a, b, N=10000):
+    """Approximate the integral of f on the interval [a,b].
+
+    Parameters:
+        f (function): the function to integrate. Accepts and returns scalars.
+        a (float): the lower bound of interval of integration.
+        b (float): the lower bound of interval of integration.
+        N (int): The number of random points to sample.
+
+    Returns:
+        (float): An approximation of the integral of f over [a,b].
+
+    Example:
+        >>> f = lambda x: x**2
+        >>> mc_integrate1d(f, -4, 2)    # Integrate from -4 to 2.
+        23.734810301138324              # The true value is 24.
+    """
+    #ensure that N is an integer as opposed to a float
+    N = int(N)
+    #volume multiplied by average of points
+    points = np.random.uniform(a,b,N)
+    return (b-a) * (sum([f(i) for i in points]) / N)
+
+def test_mc_1d():
+    """ testing the one dimensional monte carlo integration function"""
+    f = lambda x: x**2
+    g = lambda x: np.sin(x)
+    h = lambda x: 1/x
+    q = lambda x: abs(np.sin(10*x)*np.cos(10*x)+(np.sqrt(5)*np.sin(3*x)))
+    f_list, g_list, h_list, q_list = [],[],[],[]
+    for i in (int(2e2),int(2e3),int(2e5)):
+    # for i in (1,1,int(2e6)):
+        f_list.append(mc_integrate1d(f,-4,2,i))
+        g_list.append(mc_integrate1d(g,-2*np.pi,2*np.pi,i))
+        h_list.append(mc_integrate1d(h,1,10,i))
+        q_list.append(mc_integrate1d(q,1,5,i))
+
+    print(f_list,g_list,h_list,q_list,sep="\n")
+
+def mc_integrate(f, mins, maxs, N=10000):
+    """Approximate the integral of f over the box defined by mins and maxs.
+
+        Parameters:
+            f (function): The function to integrate. Accepts and returns
+            1-D NumPy arrays of length n.
+            mins (list): the lower bounds of integration.
+            maxs (list): the upper bounds of integration.
+            N (int): The number of random points to sample.
+
+        Returns:
+            (float): An approximation of the integral of f over the domain.
+
+        Example:
+            # Define f(x,y) = 3x - 4y + y^2. Inputs are grouped into an array.
+            >>> f = lambda x: 3*x[0] - 4*x[1] + x[1]**2
+
+        # Integrate over the box [1,3]x[-2,1].
+            >>> mc_integrate(f, [1, -2], [3, 1])
+            53.562651072181225              # The true value is 54.
+    """
+    #ensure N is an integer not a float
+    n = len(maxs)
+    N = int(N)
+    volume = 1
+    for i in range(len(mins)):
+        volume *= (maxs[i]-mins[i])
+    # print(volume) #check it then comment out
+
+    #convert the mins and maxes to np.arrays to use broadcasting,
+    #then I can multiply by "B_i" and then add "A_i"
+
+    points = np.random.uniform(0,1,(n,N))
+
+    # print(np.shape(points))
+    #the shape of points is (n,N)
+    # arr_maxs = np.reshape(np.array(maxs),(n,1))
+    # arr_mins = np.reshape(np.array(mins),(n,1))
+    arr_maxs = np.array(maxs)
+    arr_mins = np.array(mins)
+
+    #shift the points so that the vectors are in the correct locations after being initialized in a [0,1] (n dimension) uniform distribution
+    shiftByMax = points.T * ( arr_maxs - arr_mins)
+    shiftedPoints = (shiftByMax + arr_mins).T
+    #return the monte carlo estimation
+    # print(type(f(shiftedPoints)))
+    # return float(volume / N * (np.sum(f(shiftedPoints))))
+    return float(volume / N * (np.sum([f(pt) for pt in shiftedPoints.T])))
+    # return float((volume / N) * (np.sum(f(pt) for pt in shiftedPoints)))
+
+def higher_dim_mc_test():
+    """ test the mc_integrate function on higher dimension domains"""
+    f = lambda x: x[0]**2+x[1]**2
+    g = lambda x: 3*x[0]-4*x[1]+x[1]**2
+    h = lambda x: x[0]+x[1]-x[2]*x[3]**2
+
+    f_low_bounds, f_up_bounds = [0,0],[1,1]
+    g_low_bounds, g_up_bounds = [1,-2],[3,1]
+    h_low_bounds, h_up_bounds = [-1,-2,-3,-4],[1,2,3,4]
+    # print(f_low_bounds,f_up_bounds,g_low_bounds,g_up_bounds,h_low_bounds,h_up_bounds,sep="\n")
+    f_list, g_list, h_list= [],[],[]
+
+    #individual test case
+    # print(mc_integrate(f,f_low_bounds,f_up_bounds,int(2e3)))
+
+    #multiple functions test convergence
+    for i in (int(2e2),int(2e3),int(2e5)):
+        f_list.append(mc_integrate(f,f_low_bounds,f_up_bounds,i))
+        g_list.append(mc_integrate(g,g_low_bounds,g_up_bounds,i))
+        h_list.append(mc_integrate(h,h_low_bounds,h_up_bounds,i))
+    print(f_list,g_list,h_list,sep="\n")
+
+def prob4():
+    """Let n=4 and Omega = [-3/2,3/4]x[0,1]x[0,1/2]x[raise NotImplementedError0,1].
+    - Define the joint distribution f of n standard normal random variables.
+    - Use SciPy to integrate f over Omega.
+    - Get 20 integer values of N that are roughly logarithmically spaced from
+        10**1 to 10**5. For each value of N, use mc_integrate() to compute
+        estimates of the integral of f over Omega with N samples. Compute the
+        relative error of estimate.
+    - Plot the relative error against the sample size N on a log-log scale.
+        Also plot the line 1 / sqrt(N) for comparison.
+    """
+    #define F, which will be sent to mc_integrate(), four dimensional function
+    # f = lambda x: np.exp(-1/2 * (x[0]**2+x[1]**2+x[2]**2+x[3]**2)) * (1/ (2*np.pi**2))
+    f = lambda x: np.exp(-1/2 * (x.T @ x)) * (1/ (2*(np.pi))**2)
+    # f = lambda x: 1. / (2*np.pi) ** (x.size/2.) * np.exp(-x @ x / 2.)
+    #N is the number of samples
+    N = np.logspace(1,5,20).astype(np.int) #as opposed to linspace
+    #define the bounds of integration
+    mins = np.array([(-3/2),0,0,0])
+    maxs = np.array([(3/4),1,(1/2),1])
+    #the distribution has mean 0 and covariance I (the nxn identity)
+    means, cov = np.zeros(4), np.eye(4)
+    #compute true value of F with scipy
+    F = stats.mvn.mvnun(mins,maxs,means,cov)[0]
+    #use function from prob 3 to get relative error for each element of N,
+    #using mc_integrate(), note mins, maxs don't change
+    estimates = np.array([mc_integrate(f,mins,maxs,i) for i in N])
+    rel_error = np.abs(F - estimates) / np.abs(F)
+
+    # print(estimates)
+    # print(rel_error)
+    # print(F)
+
+    #plot the relative error on a log-log scale, plot the 1/ sqrt(N) for comparison
+    error = 1 / np.sqrt(N)
+    plt.loglog(N,rel_error,color="blue",label="Relative Error")
+    plt.loglog(N,error,color="orange",label="Monte Carlo Error")
+    plt.legend(loc=1)
+    plt.show()
+
+if __name__ == "__main__":
+
+    # ball_v_test()
+    # test_mc_1d()
+    # higher_dim_mc_test()
+    # prob4()
+    pass
