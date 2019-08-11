@@ -1,9 +1,3 @@
-# condition_stability.py
-"""Volume 1: Conditioning and Stability.
-<Joseph Wilkes>
-<sec 01>
-<mar 22 2019>
-"""
 import numpy as np
 from scipy import linalg as la
 from matplotlib import pyplot as plt
