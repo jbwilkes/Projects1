@@ -362,6 +362,7 @@ class LinkPredictor:
         ind2 = self.names.index(node2)
         self.adjacency[ind1][ind2] += 1
         self.adjacency[ind2][ind1] += 1
+        self.resistance = effective_resistance(self.adjacency) 
         #the return isn't necessary but is good practice
         return
         # raise NotImplementedError("Add_link method incomplete")
