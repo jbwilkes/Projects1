@@ -1,6 +1,6 @@
 # Projects1 
 
-Each directory has it's own corresponding README with greater detail. <br>
+Each directory will have it's own corresponding README with greater detail. <br>
 Note that all the projects listed in this repository are implemented in Python. <br>
 
 **BFS, Breadth-First-Search:** <br>
