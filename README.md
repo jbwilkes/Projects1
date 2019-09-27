@@ -2,6 +2,7 @@
 
 Each directory will have it's own corresponding README with greater detail. <br>
 Note that all the projects listed in this repository are implemented in Python. <br>
+[Several of these projects utilize graph theory - see this link for a brief intro](https://en.wikipedia.org/wiki/Graph_theory)
 
 **BFS, Breadth-First-Search:** <br>
  
@@ -17,7 +18,9 @@ I implemented a class that represents a binary tree. I compared the benefits of 
 
 **Differentiation:** <br>
 
-**Drazin:** <br>
+**Drazin:** <br> 
+
+The Drazin inverse is a matrix (pseudo-inverse) that encapsulates the connectivity between nodes in an undirected graph. In this lab I simulate friend prediction/recommendation in social media. 
 
 **KNN (K-Nearest-Neighbor):** <br>
 
@@ -29,6 +32,6 @@ Markov Chains are valuable for making prediction given initial condiitons and pr
 
 **Newtons_methods:** <br>
 
-**PageRank:** <br>
+**PageRank:** <br> The PageRank algorithm is the birthplace of the Google search engine. It provides a way to denote the importance of nodes in a directed graph (like the importance of webpages on the internet). 
 
-**Unit_testing:** <br>
+**Unit_testing:** <br> This project demonstrates the beneficial practice of building test cases for code. These test cases can be used to validate changes in a program. 
