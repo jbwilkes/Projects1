@@ -20,7 +20,7 @@ I implemented a class that represents a binary tree. I compared the benefits of 
 
 **Drazin:** <br> 
 
-The Drazin inverse is a matrix (pseudo-inverse) that encapsulates the connectivity between nodes in an undirected graph. In this lab I simulate friend prediction/recommendation in social media. 
+The Drazin inverse is a matrix (pseudo-inverse) that encapsulates the connectivity between nodes in an undirected graph. This lab simulates "friend" recommendation/prediction in social media. 
 
 **KNN (K-Nearest-Neighbor):** <br>
 
