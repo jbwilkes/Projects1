@@ -9,7 +9,7 @@ The Breadth-first-search algorithm is a method for finding the shortest path to 
 
 **Binary_Trees:** <br>
 
-I implemented a class that represents a binary tree. I compared the benefits of this data structure to singly-linked-lists, and a "AVL" or balanced binary tree. <br>
+I implemented a class that represents a binary tree. I compared the benefits of this data structure to singly-linked-lists, and an "AVL" or balanced binary tree. <br>
 
 **Conditional_Stability:** <br> 
 
