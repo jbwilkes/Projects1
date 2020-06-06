@@ -26,7 +26,7 @@ The Drazin inverse is a matrix (pseudo-inverse) that encapsulates the connectivi
 
 **Markov_Chains:** <br>
 
-Markov Chains are valuable for making prediction given initial condiitons and probabilities for transitioning from one state to another. Among several applications, these concepts can be applied to transitioning from one word to another in the english language - which results in humorous language generation. <br>
+Markov Chains are valuable for making predictions given initial conditons and probabilities for transitioning from one state to another. Among several applications, these concepts can be applied to transitioning from one word to another in the english language - which results in humorous language generation. <br>
 
 **Monte_carlo:** <br>
 
